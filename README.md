@@ -27,7 +27,8 @@ QPCLI.py clients listpods
 
 Usage:
 
-```QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!
+```
+QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!
 ```
 
 
