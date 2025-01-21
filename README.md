@@ -22,11 +22,13 @@ QPCLI.py auth print-auth-token
 QPCLI.py --bypass-login auth set-auth-token  #--bypass-login will no longer be needed in a future update.
 QPCLI.py --bypass-login auth delete-auth-token   #--bypass-login will no longer be needed in a future update.
 QPCLI.py hosts listmachines
-QPCLI.py clients listpods```
+QPCLI.py clients listpods
+```
 
 Usage:
 
-```QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!```
+```QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!
+```
 
 
 COMING SOON:
