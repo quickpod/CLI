@@ -21,8 +21,8 @@ ALL CURRENT COMMANDS:
 QPCLI.py auth print-auth-token
 QPCLI.py --bypass-login auth set-auth-token  #--bypass-login will no longer be needed in a future update.
 QPCLI.py --bypass-login auth delete-auth-token   #--bypass-login will no longer be needed in a future update.
-QPCLI.py hosts listmachines
-QPCLI.py clients listpods
+QPCLI.py hosts list-machines
+QPCLI.py clients list-pods
 ```
 
 Usage:
