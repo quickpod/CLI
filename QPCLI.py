@@ -29,7 +29,7 @@ def login():
             with open('.env', 'w') as f:
                 f.write(f"authToken={authToken}")
             load_dotenv()
-            print(authToken)
+            #print(authToken)
             print("Auth Token Stored successfully!")
             
         else:
@@ -185,12 +185,12 @@ auth_subparsers.add_parser('set-auth-token', help="Enter your own 403-character 
 clients_parser = subparsers.add_parser('clients', help="Client Commands")
 clients_subparsers = clients_parser.add_subparsers(help="Client subcommands")
 
-clients_subparsers.add_parser('listpods', help="List all pods with details.").set_defaults(func=list_pods)
+clients_subparsers.add_parser('list-pods', help="List all pods with details.").set_defaults(func=list_pods)
 
 hosts_parser = subparsers.add_parser('hosts', help="Host Commands")
 hosts_subparsers = hosts_parser.add_subparsers(help="Host subcommands")
 
-showmachines_parser = hosts_subparsers.add_parser('listmachines', help="")
+showmachines_parser = hosts_subparsers.add_parser('list-machines', help="Show a list of all active machines under this host account.")
 showmachines_parser.set_defaults(func=list_machines)
 
 args = parser.parse_args()
