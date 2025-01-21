@@ -1,4 +1,4 @@
-This project is licensed under the GNU GENERAL PUBLIC LICENSE - see the ./LICENSE file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
 
 # CLI
 A Command line python tool that interfaces with the QuickPod API to manage machines and pods.
