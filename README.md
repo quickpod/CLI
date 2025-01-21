@@ -1,7 +1,7 @@
 # CLI
 A Command line python tool that interfaces with the QuickPod API to manage machines and pods.
 
-```QPCLI.py -h
+QPCLI.py -h
 Command-line utility for managing machines and jobs
 
 positional arguments:
@@ -27,7 +27,7 @@ QPCLI.py clients listpods
 
 Usage:
 
-QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!```
+QPCLI.py [OPTIONAL ARGUMENTS] [POSITIONAL ARGUMENTS] [SECONDARY-POSITIONAL ARGUMENTS] [FLAGS] #Flags coming soon in a future update!
 
 
 COMING SOON:
