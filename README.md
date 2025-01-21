@@ -37,6 +37,7 @@ COMING SOON:
 - JSON exporter for all commands (--json, -j)
 - CSV exporter for certain commands (--csv, -c)
 - Silent Mode for pod controls (--silent, -s)
+- API Key Authentication (In addition to Username/Password)
 - Pod Controls(Start, Stop, Destroy, Create)
 - Host Earning Stats
 - Client Billing Stats
