@@ -67,11 +67,11 @@ Global Arguments:
 or without arguments
 
 Filters:
---num-gpus NUM_GPUS   Number of GPUs to filter the pods
---max-hourly-cost MAX_HOURLY_COST   Maximum hourly cost to filter the pods
---disk-space DISK_SPACE   Amount of disk space to filter the pods
---reliability RELIABILITY   Minimum reliability level to filter the pods
---duration DURATION   Minimum duration to filter the pods (in hours)
+--num-gpus NUM_GPUS   Number of GPUs to filter the pods # EX. --num-gpus 4
+--max-hourly-cost MAX_HOURLY_COST   Maximum hourly cost to filter the pods  # EX. --max-hourly-cost 0.2
+--disk-space DISK_SPACE   Amount of disk space to filter the pods # EX. --disk-space 100
+--reliability RELIABILITY   Minimum reliability level to filter the pods # EX. --reliability 90
+--duration DURATION   Minimum duration to filter the pods (in Days) # EX. --duration 60
 --gpu-type GPU_TYPE   Type of GPU to filter the pods  # EX. --gpu-type 'NVIDIA GeForce RTX 3060'
 --location LOCATION   Location to filter the pods  #Nonfunctional currently
 
@@ -81,6 +81,10 @@ Sort:
   - reliability
   - performance
 Ex. --sortby price
+
+Examples:
+python3 QPCLI.py --json client search --num-gpus 1 --gpu-type 'NVIDIA GeForce RTX 3060'
+python3 QPCLI.py --csv mycsv1 client search
 ```
 ###### search-occupied
 ###### search-all-gpu
