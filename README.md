@@ -5,7 +5,7 @@ A Command line python tool that interfaces with the QuickPod API to manage machi
 
 !!!IMPORTANT!!!
 Dependencies for Dotenv and Pandas are required to run this script!
-`pip install python-dotenv; pip install pandas`
+```pip install python-dotenv; pip install pandas```
 
 ```QPCLI.py -h```
 
