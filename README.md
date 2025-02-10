@@ -3,6 +3,10 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 # CLI
 A Command line python tool that interfaces with the QuickPod API to manage machines and pods.
 
+!!!IMPORTANT!!!
+Dependencies for Dotenv and Pandas are required to run this script!
+`pip install python-dotenv; pip install pandas`
+
 ```QPCLI.py -h```
 
 ```positional arguments:
