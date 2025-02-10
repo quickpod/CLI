@@ -34,6 +34,12 @@ Dependencies for Dotenv and Pandas are required to run this script!
 
 ### Client
 ###### list-pods
+###### - Global Arguments: 
+```--raw
+--json
+--list
+or without arguments
+```
 ###### list-cpu-pods
 ###### list-all-pods
 ###### search
