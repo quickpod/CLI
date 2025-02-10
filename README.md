@@ -33,7 +33,19 @@ Dependencies for Dotenv and Pandas are required to run this script!
 ### Auth
 
 ### Client
-###### Options
+###### list-pods
+###### list-cpu-pods
+###### list-all-pods
+###### search
+###### search-occupied
+###### search-all-gpu
+###### public-templates
+###### my-templates
+###### create
+###### start
+###### stop
+###### restart
+###### destroy
 
 ### Host
 
