@@ -101,7 +101,6 @@ def search_all():
                         'GPU PCIe Version', 'PCIE Speed', 'GPU PCIe Lanes', 'Max Disk Size', 'Ports Count', 'Perf Score', 'Created At', 
                         'Occupied', 'Last Updated', 'On Job', 'Ubuntu Version', 'CPU Architecture', 'Current Rentals Stored', 'Current Rentals Running'
                     ])
-                    #writer.writerow(header)
                     for offer in offers:
                         machines = offer.get('_machines', [])
                         for key, value in machines.items():
@@ -159,7 +158,6 @@ def search_all():
         search_notrentable()
 def search():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/rentable'
         params = {
             'num_gpus': args.num_gpus,
@@ -309,7 +307,6 @@ def search():
         print("Error: AuthToken not found. Please log in first.")
 def search_cpu():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/rentable_cpu'
         params = {
             'num_gpus': args.num_gpus,
@@ -331,7 +328,6 @@ def search_cpu():
                 print(offers)
                 for offer in offers:
                     machines = offer.get('_machines', [])
-                    #print(machines)
                     for key, value in machines.items():
                         globals()[key] = value
                     print("--------Machine Overview--------")
@@ -379,11 +375,6 @@ def search_cpu():
                     print(f"CPU Architecture: {cpu_arch}")
                     print(f"Current Rentals Stored: {current_rentals_resident}")
                     print(f"Current Rentals Running: {current_rentals_on_demand}")
-
-                    machines_dict = offer.get('_machines', [])
-                    #print(machines_dict)
-                    #print(type(machines_dict))  # Print the type of 'data' to confirm if it's a dict or list
-                    #pprint.pprint(machines_dict)
                     
                 if isinstance(offers, list):
                     print("ok")
@@ -397,7 +388,6 @@ def search_cpu():
         print("Error: AuthToken not found. Please log in first.")
 def search_notrentable():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/notrentable'
         params = {
             'num_gpus': args.num_gpus,
@@ -551,7 +541,6 @@ def search_notrentable():
         print("Error: AuthToken not found. Please log in first.")
 def search_notrentable_cpu():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/rentable'
         params = {
             'num_gpus': args.num_gpus,
@@ -568,10 +557,8 @@ def search_notrentable_cpu():
         if response.status_code == 200:
             try:
                 offers = response.json()
-                #print(offers)
                 for offer in offers:
                     machines = offer.get('_machines', [])
-                    #print(machines)
                     for key, value in machines.items():
                         globals()[key] = value
                     print("--------Machine Overview--------")
@@ -619,11 +606,6 @@ def search_notrentable_cpu():
                     print(f"CPU Architecture: {cpu_arch}")
                     print(f"Current Rentals Stored: {current_rentals_resident}")
                     print(f"Current Rentals Running: {current_rentals_on_demand}")
-
-                    machines_dict = offer.get('_machines', [])
-                    #print(machines_dict)
-                    #print(type(machines_dict))  # Print the type of 'data' to confirm if it's a dict or list
-                    #pprint.pprint(machines_dict)
                     
                 if isinstance(offers, list):
                     print("ok")
@@ -642,7 +624,6 @@ def json_parser(json_data):
     print(json.dumps(json_data, indent=4))
 def list_pods():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")    
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods'
         headers = {
             'Authorization': f'Bearer {authToken}',
@@ -702,13 +683,11 @@ def list_pods():
         print("Error: AuthToken not found. Please log in first.")
 def list_pods_cpu():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")    
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods_cpu'
         headers = {
             'Authorization': f'Bearer {authToken}',
             'Content-Type': 'application/json'
         }   
-        # Send GET request to list pods
         response = requests.get(pods_url, headers=headers)    
         if response.status_code == 200:
             if silent:
@@ -840,7 +819,6 @@ def create_job():
         response = requests.post(pods_url, headers=headers, params=params)    
         message = response.json()
         if response.status_code == 200:
-            #print("success!")
             print(message)
         else:
             print(f"Failed to create pod. Status code: {response.status_code}")
@@ -869,8 +847,11 @@ def create_pod():
         response = requests.post(pods_url, headers=headers, params=params)    
         message = response.json()
         if response.status_code == 200:
-            #print("success!")
-            print(message)
+            if args.json:
+                json_parser(message)
+            else:
+                print(message)
+
         else:
             print(f"Failed to create pod. Status code: {response.status_code}")
             print(message)
@@ -981,7 +962,6 @@ def destroy_pod():
 
 def list_machines():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         machines_url = 'https://api.quickpod.io/api:KoOk0R5J/mymachines'
         headers = {
             'Authorization': f'Bearer {authToken}',
@@ -1051,7 +1031,6 @@ def list_machines():
         print("Error: AuthToken not found. Please log in first.")
 def list_cpu_machines():
     if authToken:
-        #print(f"Using AuthToken (First Four Letters): {authToken[:4]}...")
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mymachines_cpu'
         headers = {
             'Authorization': f'Bearer {authToken}',
@@ -1117,8 +1096,11 @@ def delete_auth_token():
     if os.path.exists(dotenv_file):
         try:
             os.remove(dotenv_file)  
-            print("the Auth Token has been deleted.")
-            exit()
+            if silent:
+                exit()
+            else:
+                print("the Auth Token has been deleted.")
+                exit()
         except Exception as e:
             print(f"An error occurred while deleting {dotenv_file}: {e}")
             exit()
@@ -1275,9 +1257,9 @@ destroy_subparser.add_argument('uuid', help="UUID for the pod", type=str)
 
 host_parser = subparsers.add_parser('host', help="Host Commands")
 host_subparsers = host_parser.add_subparsers(help="Host subcommands")
-host_subparsers.add_parser('list-machines', help="Show a list of all active GPU machines under this host account.").set_defaults(func=list_machines)
-host_subparsers.add_parser('list-cpu-machines', help="Show a list of all active CPU machines under this host account.").set_defaults(func=list_cpu_machines)
-host_subparsers.add_parser('list-all-machines', help="Show a list of all active machines under this host account.").set_defaults(func=list_all_machines)
+host_subparsers.add_parser('print-machines', help="Show a list of all active GPU machines under this host account.").set_defaults(func=list_machines)
+host_subparsers.add_parser('print-cpu-machines', help="Show a list of all active CPU machines under this host account.").set_defaults(func=list_cpu_machines)
+host_subparsers.add_parser('print-all-machines', help="Show a list of all active machines under this host account.").set_defaults(func=list_all_machines)
 create_subparser = host_subparsers.add_parser('create-job', help="[HOSTS] Create a Job with a Template")
 create_subparser.set_defaults(func=create_job)
 create_subparser.add_argument('--offer', help="Offer ID of the Pod", type=str)
@@ -1294,12 +1276,11 @@ if silent:
     pass
 else:
     print("QuickPod CLI Version 1.1.0.")
-    #print("THIS IS NOT A RELEASE VERSION!!! Be mindful of bugs.")
     print("Copyright (C) 2025 QuickPod. All Rights Reserved")
 load_dotenv()
 authToken = os.getenv("authToken")
 
-if args.authtoken: #Login enforcement
+if args.authtoken:
     authToken = args.authtoken
     if silent:
         pass
