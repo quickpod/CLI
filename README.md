@@ -33,6 +33,7 @@ Dependencies for Dotenv and Pandas are required to run this script!
 ### Auth
 
 ### Client
+###### Options
 
 ### Host
 
