@@ -24,7 +24,17 @@ Dependencies for Dotenv and Pandas are required to run this script!
 - Row-and-Column List (Default)
 - Silent Mode.
 
+# Usage:
+
 ```QPCLI.py -h```
+
+# Command Breakdowns:
+
+### Auth
+
+### Client
+
+### Host
 
 
 # COMING SOON:
