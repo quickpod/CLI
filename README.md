@@ -53,7 +53,22 @@ QPCLI.py <GLOBAL ARGUMENTS> [SUB-POSITIONAL ARGUMENTS] [COMMAND] [FILTERS]
 Ex. --sortby price
 ```
 
-### Auth
+### Pod Controls
+```
+Ex. python3 QPCLI.py client stop UUID
+ - Replace UUID with the Pod UUID, which can be found in the list-pods function.
+ - It is a required argument.
+```
+
+### Pod Creation
+```
+Ex. python3 QPCLI.py client create --offer-id OFFER_ID --disk DISK --template TEMPLATE_UUID --name NAME
+ - Replace the placeholders after the arguments with the required information.
+ - Same rules apply for Host Job Creation
+```
+
+
+## Auth
 
 ###### login
 ```
@@ -80,7 +95,7 @@ or without arguments
 python3 QPCLI.py [-s] auth print
 ```
 
-### client
+## client
 
 
 ###### list-pods
@@ -267,7 +282,7 @@ UUID
 python3 QPCLI.py [--raw, --json] client destroy UUID
 ```
 
-### Host
+## Host
 
 ###### print-machines
 ```
@@ -317,6 +332,9 @@ python3 QPCLI.py [--json] client create --offer-id OFFER_ID --template TEMPLATE 
 ```
 # COMING SOON:
 
+- Account Settings, creation, deletion, etc.
+- Host List machines for rental
+- Fix Sort Function
 - Host Earning Stats
 - Client Billing Stats
 - CPU Search!
