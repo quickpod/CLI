@@ -24,6 +24,14 @@ Dependencies for Dotenv and Pandas are required to run this script!
 - Row-and-Column List (Default)
 - Silent Mode.
 
+# Usage:
+```
+QPCLI.py <GLOBAL ARGUMENTS> [SUB-POSITIONAL ARGUMENTS] [COMMAND] [FILTERS]
+```
+
+- *The above explaination may be very confusing, so I have broken it down further.*
+# Command Breakdowns:
+
 ## Explaination of the Search Filter and Sort functions:
 ### Filter
 ```
@@ -32,8 +40,8 @@ Dependencies for Dotenv and Pandas are required to run this script!
  - --disk-space DISK_SPACE   Amount of disk space to filter the pods # EX. --disk-space 100
  - --reliability RELIABILITY   Minimum reliability level to filter the pods # EX. --reliability 90
  - --duration DURATION   Minimum duration to filter the pods (in Days) # EX. --duration 60
-- --gpu-type GPU_TYPE   Type of GPU to filter the pods  # EX. --gpu-type 'NVIDIA GeForce RTX 3060'
-- --location LOCATION   Location to filter the pods  #Nonfunctional currently please leave blank.
+ - --gpu-type GPU_TYPE   Type of GPU to filter the pods  # EX. --gpu-type 'NVIDIA GeForce RTX 3060'
+ - --location LOCATION   Location to filter the pods  #Nonfunctional currently please leave blank.
 ```
 ### Sort
 #### Sortby currently does NOT WORK on the API Side. We are working on a fix for this.
@@ -45,19 +53,13 @@ Dependencies for Dotenv and Pandas are required to run this script!
 Ex. --sortby price
 ```
 
-# Usage:
-```
-QPCLI.py <GLOBAL ARGUMENTS> [SUB-POSITIONAL ARGUMENTS] [COMMAND] [FILTERS]
-```
-
-- *The above explaination may be very confusing, so I have broken it down further.*
-# Command Breakdowns:
-
 ### Auth
 
 ###### login
 ```
 There are no available output arguments because input is required for this command. This will be improved later.
+
+python3 QPCLI.py auth login
 ```
 
 ###### delete
@@ -65,6 +67,8 @@ There are no available output arguments because input is required for this comma
 Global Argument:
 --silent, -s
 or without arguments
+
+python3 QPCLI.py [-s] auth delete
 ```
 
 ###### print
@@ -72,9 +76,11 @@ or without arguments
 Global Argument:
 --silent, -s
 or without arguments
+
+python3 QPCLI.py [-s] auth print
 ```
 
-### Client
+### client
 
 
 ###### list-pods
@@ -84,6 +90,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] client list-pods
 ```
 ###### list-cpu-pods
 ```
@@ -92,6 +100,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] client list-cpu-pods
 ```
 ###### list-all-pods
 ```
@@ -100,6 +110,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] client list-all-pods
 ```
 ###### search
 ```
@@ -121,6 +133,8 @@ Filters:
 
 Sort:
 --sortby SORTBY # Currently not working.
+
+python3 QPCLI.py [--raw, --json, --list, --csv CSV_NAME] client search [--num-gpus NUM_GPUS --max-hourly-cost MAX_HOURLY_COST --disk-space DISK_SPACE --reliability RELIABILITY --duration DURATION --gpu-type GPU_TYPE --location LOCATION --sortby SORTBY]
 ```
 ###### search-occupied
 ```
@@ -142,6 +156,8 @@ Filters:
 
 Sort:
 --sortby SORTBY # Currently not working.
+
+python3 QPCLI.py [--raw, --json, --list, --csv CSV_NAME] client search [--num-gpus NUM_GPUS --max-hourly-cost MAX_HOURLY_COST --disk-space DISK_SPACE --reliability RELIABILITY --duration DURATION --gpu-type GPU_TYPE --location LOCATION --sortby SORTBY]
 ```
 ###### search-all-gpu
 ```
@@ -163,6 +179,8 @@ Filters:
 
 Sort:
 --sortby SORTBY # Currently not working.
+
+python3 QPCLI.py [--raw, --json, --list, --csv CSV_NAME] client search [--num-gpus NUM_GPUS --max-hourly-cost MAX_HOURLY_COST --disk-space DISK_SPACE --reliability RELIABILITY --duration DURATION --gpu-type GPU_TYPE --location LOCATION --sortby SORTBY]
 ```
 ###### public-templates
 ```
@@ -171,6 +189,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] client public-templates
 ```
 ###### my-templates
 ```
@@ -179,6 +199,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] client my-templates
 ```
 ###### create
 ```
@@ -194,6 +216,7 @@ Required Arguments:
 Optional Argument:
 --name NAME
 
+python3 QPCLI.py [--json] client create --offer-id OFFER_ID --template TEMPLATE --disk DISK [--name NAME]
 ```
 ###### start
 ```
@@ -204,6 +227,8 @@ or without arguments
 
 Required Argument:
 UUID
+
+python3 QPCLI.py [--raw, --json] client start UUID
 ```
 ###### stop
 ```
@@ -214,6 +239,8 @@ or without arguments
 
 Required Argument:
 UUID
+
+python3 QPCLI.py [--raw, --json] client stop UUID
 ```
 ###### restart
 ```
@@ -224,6 +251,8 @@ or without arguments
 
 Required Argument:
 UUID
+
+python3 QPCLI.py [--raw, --json] client restart UUID
 ```
 ###### destroy
 ```
@@ -234,6 +263,8 @@ or without arguments
 
 Required Argument:
 UUID
+
+python3 QPCLI.py [--raw, --json] client destroy UUID
 ```
 
 ### Host
@@ -245,6 +276,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] host print-machines
 ```
 ###### print-cpu-machines
 ```
@@ -253,6 +286,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] host print-cpu-machines
 ```
 ###### print-all-machines
 ```
@@ -261,6 +296,8 @@ Global Arguments:
 --json
 --list
 or without arguments
+
+python3 QPCLI.py [--raw, --json, --list] host print-all-machines
 ```
 ###### create-job
 ```
@@ -275,8 +312,9 @@ Required Arguments:
 
 Optional Argument:
 --name NAME
-```
 
+python3 QPCLI.py [--json] client create --offer-id OFFER_ID --template TEMPLATE --disk DISK [--name NAME]
+```
 # COMING SOON:
 
 - Host Earning Stats
