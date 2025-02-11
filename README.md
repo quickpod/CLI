@@ -32,7 +32,6 @@ QPCLI.py <GLOBAL ARGUMENTS> [SUB-POSITIONAL ARGUMENTS] [COMMAND] [FILTERS]
 - *The above explaination may be very confusing, so I have broken it down further.*
 # Command Breakdowns:
 
-## Explaination of the Search Filter and Sort functions:
 ### Filter
 ```
  - --num-gpus NUM_GPUS   Number of GPUs to filter the pods # EX. --num-gpus 4
