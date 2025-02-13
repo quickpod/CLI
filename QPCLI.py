@@ -632,13 +632,14 @@ def list_ssh():
         response = requests.get(pods_url, headers=headers)   
         if response.status_code == 200:
             data_gpu = response.json()
-            print("ID                  Command")
+            print("ID                            SSH Command                                              Status")
             for pod in data_gpu:
                 podid = pod.get('id', 0)
                 ip = pod.get('public_ipaddr', 0)
                 sshport = pod.get('open_port_start', 0)
                 usrname = pod.get('Names', 'N/A')
-                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}')
+                status = pod.get('Status', 0)
+                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}     {status}')
         else:
             print(f"failed{response.status_code}")
             exit()
@@ -655,8 +656,8 @@ def list_ssh():
                 ip = pod.get('public_ipaddr', 0)
                 sshport = pod.get('open_port_start', 0)
                 usrname = pod.get('Names', 'N/A')
-                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}')
-
+                status = pod.get('Status', 0)
+                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}     {status}')
 
         else:
             print(f"failed{response.status_code}")

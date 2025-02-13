@@ -96,7 +96,12 @@ python3 QPCLI.py [-s] auth print
 
 ## client
 
+###### list-ssh-logins
+```
+There are no arguments available currently.
 
+python3 QPCLI.py client list-ssh-logins
+```
 ###### list-pods
 ```
 Global Arguments:
