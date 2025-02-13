@@ -622,6 +622,47 @@ def search_all_cpu():
     search_notrentable_cpu
 def json_parser(json_data):
     print(json.dumps(json_data, indent=4))
+def list_ssh():
+    if authToken:
+        pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods'
+        headers = {
+            'Authorization': f'Bearer {authToken}',
+            'Content-Type': 'application/json'
+        }   
+        response = requests.get(pods_url, headers=headers)   
+        if response.status_code == 200:
+            data_gpu = response.json()
+            print("ID                  Command")
+            for pod in data_gpu:
+                podid = pod.get('id', 0)
+                ip = pod.get('public_ipaddr', 0)
+                sshport = pod.get('open_port_start', 0)
+                usrname = pod.get('Names', 'N/A')
+                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}')
+        else:
+            print(f"failed{response.status_code}")
+            exit()
+        pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods_cpu'
+        headers = {
+            'Authorization': f'Bearer {authToken}',
+            'Content-Type': 'application/json'
+        }   
+        response = requests.get(pods_url, headers=headers)   
+        if response.status_code == 200:
+            data_cpu = response.json()
+            for pod in data_cpu:
+                podid = pod.get('id', 0)
+                ip = pod.get('public_ipaddr', 0)
+                sshport = pod.get('open_port_start', 0)
+                usrname = pod.get('Names', 'N/A')
+                print(f'{podid}     ssh -p {sshport} {usrname}@{ip}')
+
+
+        else:
+            print(f"failed{response.status_code}")
+            exit()
+
+
 def list_pods():
     if authToken:
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods'
@@ -1158,6 +1199,7 @@ auth_subparsers.add_parser('print', help="Display the currently stored 403-chara
 client_parser = subparsers.add_parser('client', help="Client Commands")
 client_subparsers = client_parser.add_subparsers(help="Client subcommands")
 
+client_subparsers.add_parser('list-ssh-logins', help="Show all current SSH logins available.").set_defaults(func=list_ssh)
 client_subparsers.add_parser('list-pods', help="List all GPU pods with details.").set_defaults(func=list_pods)
 client_subparsers.add_parser('list-cpu-pods', help="List all CPU pods with details.").set_defaults(func=list_pods_cpu)
 client_subparsers.add_parser('list-all-pods', help="List all pods with details.").set_defaults(func=list_all_pods)
@@ -1253,6 +1295,8 @@ restart_subparser.add_argument('uuid', help="UUID for the pod", type=str)
 destroy_subparser = client_subparsers.add_parser('destroy', help="Destroy a Pod. ALL DATA WILL BE LOST THIS ACTION IS IRREVERSABLE")
 destroy_subparser.set_defaults(func=destroy_pod)
 destroy_subparser.add_argument('uuid', help="UUID for the pod", type=str)
+
+
 
 
 host_parser = subparsers.add_parser('host', help="Host Commands")
