@@ -6,7 +6,7 @@ import json
 from datetime import datetime 
 import csv
 import pandas as pd
-   
+
 #print("QuickPod CLI Version 1.1.0.")
 #print("Copyright (C) 2025 QuickPod. All Rights Reserved")
 #Thank you for choosing QuickPod!
@@ -972,7 +972,46 @@ def restart_pod():
             else:
                 print(f"Failed to restart pod. Status code: {response.status_code}")
                 print(message)
-            
+def restart_all_pods():
+    if authToken:
+        pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mypods'
+        headers = {
+            'Authorization': f'Bearer {authToken}',
+            'Content-Type': 'application/json'
+        }   
+        response = requests.get(pods_url, headers=headers)   
+        mypods = response.json()
+        if response.status_code == 200:
+            for pod in mypods:
+                uuid = pod.get('Names', 'N/A')
+                ID = pod.get('id', 'N/A')
+                pods_url = 'https://api.quickpod.io/api:KoOk0R5J/restartpod'
+                headers = {
+                    'Authorization': f'Bearer {authToken}',
+                    'Content-Type': 'application/json'
+                }   
+                params = {
+                    'pod_uuid': f'{uuid}'
+                }
+                response = requests.get(pods_url, headers=headers, params=params)    
+                message = response.json()
+                if response.status_code == 200:
+                    if args.raw:
+                        print(response.status_code)
+                    if args.json:
+                        json_parser(message)
+                    else:
+                        print(f"restarted pod {ID}")
+                        print(message)
+                else:
+                    if args.raw:
+                        print(response.status_code)
+                    if args.json:
+                        json_parser(message)
+                    else:
+                        print(f"Failed to restart pod. Status code: {response.status_code}")
+                        print(message)
+
 def destroy_pod():
     if authToken:
         pods_url = 'https://api.quickpod.io/api:KoOk0R5J/destroypod'
@@ -1292,6 +1331,9 @@ stop_subparser.add_argument('uuid', help="UUID for the pod", type=str)
 restart_subparser = client_subparsers.add_parser('restart', help="Restart a Pod")
 restart_subparser.set_defaults(func=restart_pod)
 restart_subparser.add_argument('uuid', help="UUID for the pod", type=str)
+
+restart_all_subparser = client_subparsers.add_parser('restart-all', help="Restart all Pods")
+restart_all_subparser.set_defaults(func=restart_all_pods)
 
 destroy_subparser = client_subparsers.add_parser('destroy', help="Destroy a Pod. ALL DATA WILL BE LOST THIS ACTION IS IRREVERSABLE")
 destroy_subparser.set_defaults(func=destroy_pod)
