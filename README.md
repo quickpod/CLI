@@ -9,20 +9,9 @@ Dependencies for Dotenv and Pandas are required to run this script!
 
 # New Features:
 
-- Search Function!
-- Direct API Sort and filter optiopns for the Search Function.
-- Create, Start, Stop, Restart, and Destroy Pods; and Create Host Jobs.
-- Upgraded Login System!
-- Template Finder!
-
-# New Global Arguments:
-
-- Raw API Output.
-- Json Output.
-- CSV File Export.
-- Machine-by-machine List.
-- Row-and-Column List (Default)
-- Silent Mode.
+- Commented ALL Code!
+- Added `list-ssh-logins` command
+- Added `restart-all` command
 
 # Usage:
 ```
