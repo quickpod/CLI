@@ -390,12 +390,12 @@ def search(): # Offers Search function
 def search_cpu():
     pods_url = 'https://api.quickpod.io/api:KoOk0R5J/rentable_cpu'
     params = {
-        'num_gpus': args.num_gpus,
+        'num_gpus': args.num_cpus,
         'max_hourly_cost': args.max_hourly_cost,
         'disk_space': args.disk_space,
         'reliability': args.reliability,
         'duration': args.duration,
-        'gpu_type': args.gpu_type,
+        'gpu_type': args.cpu_type,
         'location': args.location,
         'sort_by' : args.sortby,
     } 
@@ -403,58 +403,61 @@ def search_cpu():
     response = requests.get(pods_url, params=params) # Sends a GET request to the API
     if response.status_code == 200: # If Success:
         try:
-            offers = response.json # Parses offers
-            for offer in offers: # For every offer:
-                machines = offer.get('_machines', []) # gets _machines section of API response.
-                for key, value in machines.items(): # Assigns the corresponding variables to the json response.
-                    globals()[key] = value
-                print("--------Machine Overview--------")
-                print(f"Offer Name: {offer.get('offer_name', 'N/A')}")
-                print(f"Offer ID: {offer.get('id', 'N/A')}")
-                print(f"Machine ID: {offer.get('machines_id', 'N/A')}")
-                print(f"Host: {user_id}")
-                print(f"Verified: {verification}")
-                print(f"Location: {geolocation}")
-                print(f"Location Details: {geoinfo}")
-                print(f"Internet Download Speed: {inet_down}")
-                print(f"Internet Upload Speed: {inet_up}")
-                print(f"Reliability: {reliability}")
-                print(f"Max Duration: {max_duration}")
-                print(f"Offer Type: {offer.get('offer_type', 'N/A')}")
-                print(f"CPU Name: {cpu_name}")
-                print(f"Memory: {offer.get('memory', 'N/A')} GB")
-                print(f"CPUs: {offer.get('cpus', 'N/A')}")
-                print(f"CPU Frequency: {cpu_frequency}")
-                print(f"Hourly Cost: ${offer.get('hourly_cost', 'N/A')}")
-                print(f"TFLops per Dollar: {offer.get('tflops_per_dollar', 'N/A')}")
-                print(f"Perf per Dollar: {offer.get('perf_per_dollar', 'N/A')}")
-
-                print("--------Machine Details--------")
-                print(f"GPU Type: {offer.get('gpu_type', 'N/A')}")
-                print(f"Num GPUs: {offer.get('num_gpus', 'N/A')}")
-                print(f"TFLops: {offer.get('tflops', 'N/A')}")
-                print(f"Max CUDA Version: {max_cuda}")
-                print(f"GPU VRAM: {offer.get('gpu_vram', 'N/A')} MB")
-                print(f"GPU PCIe Version: {offer.get('gpu_pcie', 'N/A')}")
-                print(f"PCIE Speed: {bw_dev_cpu}")
-                print(f"GPU PCIe Lanes: {offer.get('gpu_lanes', 'N/A')}")
-                print(f"Max Disk Size: {offer.get('max_disk_size', 'N/A')} GB")
-                print(f"Ports Count: {offer.get('ports_count', 'N/A')}")
-                print(f"Perf Score: {perf_score}")
-
-                print("--------Advanced--------")
-                created_at_human = unix_to_human_time(offer.get('created_at'))
-                last_updated_human = unix_to_human_time(offer.get('last_updated'))
-                print(f"Created At: {created_at_human}")
-                print(f"Occupied: {offer.get('occupied', 'N/A')}")
-                print(f"Last Updated: {last_updated_human}")
-                print(f"On Job: {offer.get('onjob', 'N/A')}")
-                print(f"Ubuntu Version: {ubuntu_version}")
-                print(f"CPU Architecture: {cpu_arch}")
-                print(f"Current Rentals Stored: {current_rentals_resident}")
-                print(f"Current Rentals Running: {current_rentals_on_demand}")
+            offers = response.json() # Parses offers
+            if args.json:
+                json_parser(offers)
+            elif args.raw:
+                print(offers)
             else:
-                print("The response is not a list of pods. Please check the API response.")
+                for offer in offers: # For every offer:
+                    machines = offer.get('_machines', []) # gets _machines section of API response.
+                    for key, value in machines.items(): # Assigns the corresponding variables to the json response.
+                        globals()[key] = value
+                    print("--------Machine Overview--------")
+                    print(f"Offer Name: {offer.get('offer_name', 'N/A')}")
+                    print(f"Offer ID: {offer.get('id', 'N/A')}")
+                    print(f"Machine ID: {offer.get('machines_id', 'N/A')}")
+                    print(f"Host: {user_id}")
+                    print(f"Verified: {verification}")
+                    print(f"Location: {geolocation}")
+                    print(f"Location Details: {geoinfo}")
+                    print(f"Internet Download Speed: {inet_down}")
+                    print(f"Internet Upload Speed: {inet_up}")
+                    print(f"Reliability: {reliability}")
+                    print(f"Max Duration: {max_duration}")
+                    print(f"Offer Type: {offer.get('offer_type', 'N/A')}")
+                    print(f"CPU Name: {cpu_name}")
+                    print(f"Memory: {offer.get('memory', 'N/A')} GB")
+                    print(f"CPUs: {offer.get('cpus', 'N/A')}")
+                    print(f"CPU Frequency: {cpu_frequency}")
+                    print(f"Hourly Cost: ${offer.get('hourly_cost', 'N/A')}")
+                    print(f"TFLops per Dollar: {offer.get('tflops_per_dollar', 'N/A')}")
+                    print(f"Perf per Dollar: {offer.get('perf_per_dollar', 'N/A')}")
+
+                    print("--------Machine Details--------")
+                    print(f"GPU Type: {offer.get('gpu_type', 'N/A')}")
+                    print(f"Num GPUs: {offer.get('num_gpus', 'N/A')}")
+                    print(f"TFLops: {offer.get('tflops', 'N/A')}")
+                    print(f"Max CUDA Version: {max_cuda}")
+                    print(f"GPU VRAM: {offer.get('gpu_vram', 'N/A')} MB")
+                    print(f"GPU PCIe Version: {offer.get('gpu_pcie', 'N/A')}")
+                    print(f"PCIE Speed: {bw_dev_cpu}")
+                    print(f"GPU PCIe Lanes: {offer.get('gpu_lanes', 'N/A')}")
+                    print(f"Max Disk Size: {offer.get('max_disk_size', 'N/A')} GB")
+                    print(f"Ports Count: {offer.get('ports_count', 'N/A')}")
+                    print(f"Perf Score: {perf_score}")
+
+                    print("--------Advanced--------")
+                    created_at_human = unix_to_human_time(offer.get('created_at'))
+                    last_updated_human = unix_to_human_time(offer.get('last_updated'))
+                    print(f"Created At: {created_at_human}")
+                    print(f"Occupied: {offer.get('occupied', 'N/A')}")
+                    print(f"Last Updated: {last_updated_human}")
+                    print(f"On Job: {offer.get('onjob', 'N/A')}")
+                    print(f"Ubuntu Version: {ubuntu_version}")
+                    print(f"CPU Architecture: {cpu_arch}")
+                    print(f"Current Rentals Stored: {current_rentals_resident}")
+                    print(f"Current Rentals Running: {current_rentals_on_demand}")
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # Prints the error.
     else:
@@ -473,9 +476,11 @@ def search_notrentable():
     }
 
     response = requests.get(pods_url, params=params) # Sends a GET request with the required filters.
+    print(response)
     if response.status_code == 200: # If success:
         try:
             offers = response.json() # Parses JSON
+            print(offers)
             if args.csv:
                 with open(f'{csv_name}.csv', mode='w', newline='', encoding='utf-8') as csvfile: # Creates a new CSV file.
                     writer = csv.writer(csvfile)
@@ -607,12 +612,12 @@ def search_notrentable():
 def search_notrentable_cpu():
     pods_url = 'https://api.quickpod.io/api:KoOk0R5J/notrentable_cpu'
     params = {
-        'num_gpus': args.num_gpus,
+        'num_gpus': args.num_cpus,
         'max_hourly_cost': args.max_hourly_cost,
         'disk_space': args.disk_space,
         'reliability': args.reliability,
         'duration': args.duration,
-        'gpu_type': args.gpu_type,
+        'gpu_type': args.cpu_type,
         'location': args.location,
         'sort_by' : args.sortby,
     } 
@@ -620,58 +625,61 @@ def search_notrentable_cpu():
     response = requests.get(pods_url, params=params) # Sends a GET request to the API
     if response.status_code == 200: # If Success:
         try:
-            offers = response.json # Parses offers
-            for offer in offers: # For every offer:
-                machines = offer.get('_machines', []) # gets _machines section of API response.
-                for key, value in machines.items(): # Assigns the corresponding variables to the json response.
-                    globals()[key] = value
-                print("--------Machine Overview--------")
-                print(f"Offer Name: {offer.get('offer_name', 'N/A')}")
-                print(f"Offer ID: {offer.get('id', 'N/A')}")
-                print(f"Machine ID: {offer.get('machines_id', 'N/A')}")
-                print(f"Host: {user_id}")
-                print(f"Verified: {verification}")
-                print(f"Location: {geolocation}")
-                print(f"Location Details: {geoinfo}")
-                print(f"Internet Download Speed: {inet_down}")
-                print(f"Internet Upload Speed: {inet_up}")
-                print(f"Reliability: {reliability}")
-                print(f"Max Duration: {max_duration}")
-                print(f"Offer Type: {offer.get('offer_type', 'N/A')}")
-                print(f"CPU Name: {cpu_name}")
-                print(f"Memory: {offer.get('memory', 'N/A')} GB")
-                print(f"CPUs: {offer.get('cpus', 'N/A')}")
-                print(f"CPU Frequency: {cpu_frequency}")
-                print(f"Hourly Cost: ${offer.get('hourly_cost', 'N/A')}")
-                print(f"TFLops per Dollar: {offer.get('tflops_per_dollar', 'N/A')}")
-                print(f"Perf per Dollar: {offer.get('perf_per_dollar', 'N/A')}")
-
-                print("--------Machine Details--------")
-                print(f"GPU Type: {offer.get('gpu_type', 'N/A')}")
-                print(f"Num GPUs: {offer.get('num_gpus', 'N/A')}")
-                print(f"TFLops: {offer.get('tflops', 'N/A')}")
-                print(f"Max CUDA Version: {max_cuda}")
-                print(f"GPU VRAM: {offer.get('gpu_vram', 'N/A')} MB")
-                print(f"GPU PCIe Version: {offer.get('gpu_pcie', 'N/A')}")
-                print(f"PCIE Speed: {bw_dev_cpu}")
-                print(f"GPU PCIe Lanes: {offer.get('gpu_lanes', 'N/A')}")
-                print(f"Max Disk Size: {offer.get('max_disk_size', 'N/A')} GB")
-                print(f"Ports Count: {offer.get('ports_count', 'N/A')}")
-                print(f"Perf Score: {perf_score}")
-
-                print("--------Advanced--------")
-                created_at_human = unix_to_human_time(offer.get('created_at'))
-                last_updated_human = unix_to_human_time(offer.get('last_updated'))
-                print(f"Created At: {created_at_human}")
-                print(f"Occupied: {offer.get('occupied', 'N/A')}")
-                print(f"Last Updated: {last_updated_human}")
-                print(f"On Job: {offer.get('onjob', 'N/A')}")
-                print(f"Ubuntu Version: {ubuntu_version}")
-                print(f"CPU Architecture: {cpu_arch}")
-                print(f"Current Rentals Stored: {current_rentals_resident}")
-                print(f"Current Rentals Running: {current_rentals_on_demand}")
+            offers = response.json() # Parses offers
+            if args.json:
+                json_parser(offers)
+            elif args.raw:
+                print(offers)
             else:
-                print("The response is not a list of pods. Please check the API response.")
+                for offer in offers: # For every offer:
+                    machines = offer.get('_machines', []) # gets _machines section of API response.
+                    for key, value in machines.items(): # Assigns the corresponding variables to the json response.
+                        globals()[key] = value
+                    print("--------Machine Overview--------")
+                    print(f"Offer Name: {offer.get('offer_name', 'N/A')}")
+                    print(f"Offer ID: {offer.get('id', 'N/A')}")
+                    print(f"Machine ID: {offer.get('machines_id', 'N/A')}")
+                    print(f"Host: {user_id}")
+                    print(f"Verified: {verification}")
+                    print(f"Location: {geolocation}")
+                    print(f"Location Details: {geoinfo}")
+                    print(f"Internet Download Speed: {inet_down}")
+                    print(f"Internet Upload Speed: {inet_up}")
+                    print(f"Reliability: {reliability}")
+                    print(f"Max Duration: {max_duration}")
+                    print(f"Offer Type: {offer.get('offer_type', 'N/A')}")
+                    print(f"CPU Name: {cpu_name}")
+                    print(f"Memory: {offer.get('memory', 'N/A')} GB")
+                    print(f"CPUs: {offer.get('cpus', 'N/A')}")
+                    print(f"CPU Frequency: {cpu_frequency}")
+                    print(f"Hourly Cost: ${offer.get('hourly_cost', 'N/A')}")
+                    print(f"TFLops per Dollar: {offer.get('tflops_per_dollar', 'N/A')}")
+                    print(f"Perf per Dollar: {offer.get('perf_per_dollar', 'N/A')}")
+
+                    print("--------Machine Details--------")
+                    print(f"GPU Type: {offer.get('gpu_type', 'N/A')}")
+                    print(f"Num GPUs: {offer.get('num_gpus', 'N/A')}")
+                    print(f"TFLops: {offer.get('tflops', 'N/A')}")
+                    print(f"Max CUDA Version: {max_cuda}")
+                    print(f"GPU VRAM: {offer.get('gpu_vram', 'N/A')} MB")
+                    print(f"GPU PCIe Version: {offer.get('gpu_pcie', 'N/A')}")
+                    print(f"PCIE Speed: {bw_dev_cpu}")
+                    print(f"GPU PCIe Lanes: {offer.get('gpu_lanes', 'N/A')}")
+                    print(f"Max Disk Size: {offer.get('max_disk_size', 'N/A')} GB")
+                    print(f"Ports Count: {offer.get('ports_count', 'N/A')}")
+                    print(f"Perf Score: {perf_score}")
+
+                    print("--------Advanced--------")
+                    created_at_human = unix_to_human_time(offer.get('created_at'))
+                    last_updated_human = unix_to_human_time(offer.get('last_updated'))
+                    print(f"Created At: {created_at_human}")
+                    print(f"Occupied: {offer.get('occupied', 'N/A')}")
+                    print(f"Last Updated: {last_updated_human}")
+                    print(f"On Job: {offer.get('onjob', 'N/A')}")
+                    print(f"Ubuntu Version: {ubuntu_version}")
+                    print(f"CPU Architecture: {cpu_arch}")
+                    print(f"Current Rentals Stored: {current_rentals_resident}")
+                    print(f"Current Rentals Running: {current_rentals_on_demand}")
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # Prints the error.
     else:
@@ -1208,7 +1216,7 @@ def list_cpu_machines():# List CPU machines HOSTS ONLY
                             pd.set_option('display.max_columns', None)
                             pd.set_option('display.max_rows', None)
                             mymachineslist = pd.DataFrame(mymachines) # Creates list
-                            print(mymachineslist[['id', 'hotsname', 'cpu_name', 'cpu_cores', 'cpu_ram', 'geolocation', 'public_ipaddr', 'online', 'perf_score', 'reliability', 'listed', 'max_duration', 'machine_type',]].to_string(index=False)) # Prints list with only certain columns
+                            print(mymachineslist[['id', 'hostname', 'cpu_name', 'cpu_cores', 'cpu_ram', 'geolocation', 'public_ipaddr', 'online', 'perf_score', 'reliability', 'listed', 'max_duration', 'machine_type',]].to_string(index=False)) # Prints list with only certain columns
                 else:
                     print("Error: Expected a list of machines, but received a different structure.")
             except Exception as e:
@@ -1335,36 +1343,36 @@ search_all_parser.set_defaults(func=search_all)
 
 search_cpu_parser = client_subparsers.add_parser('search-cpu', help="List available CPU offers")
 search_cpu_parser.set_defaults(func=search_cpu)
-search_cpu_parser.add_argument('--num-gpus', type=int, help='Number of GPUs to filter the pods', default=0) 
+search_cpu_parser.add_argument('--num-cpus', type=int, help='Number of CPUs to filter the pods', default=0) 
 search_cpu_parser.add_argument('--max-hourly-cost', type=float, help='Maximum hourly cost to filter the pods', default=20)  
 search_cpu_parser.add_argument('--disk-space', type=int, help='Amount of disk space to filter the pods', default=0) 
 search_cpu_parser.add_argument('--reliability', type=float, help='Minimum reliability level to filter the pods', default=0)
 search_cpu_parser.add_argument('--duration', type=int, help='Minimum duration to filter the pods (in hours)', default=1)  
-search_cpu_parser.add_argument('--gpu-type', type=str, help='Type of GPU to filter the pods', default='All GPUs')  
+search_cpu_parser.add_argument('--cpu-type', type=str, help='Type of CPU to filter the pods', default='All CPUs')  
 search_cpu_parser.add_argument('--location', type=str, help='Location to filter the pods', default='All Regions') 
 search_cpu_parser.add_argument('--sortby', type=str, choices=['price', 'reliability', 'performance'], help='Sort by field', default='') 
 search_cpu_parser.set_defaults(func=search_cpu)
 
 search_occupied_cpu_parser = client_subparsers.add_parser('search-occupied-cpu', help="List NOT Available CPU offers")
 search_occupied_cpu_parser.set_defaults(func=search_notrentable_cpu)
-search_occupied_cpu_parser.add_argument('--num-gpus', type=int, help='Number of GPUs to filter the pods', default=0) 
+search_occupied_cpu_parser.add_argument('--num-cpus', type=int, help='Number of CPUs to filter the pods', default=0) 
 search_occupied_cpu_parser.add_argument('--max-hourly-cost', type=float, help='Maximum hourly cost to filter the pods', default=20)  
 search_occupied_cpu_parser.add_argument('--disk-space', type=int, help='Amount of disk space to filter the pods', default=0) 
 search_occupied_cpu_parser.add_argument('--reliability', type=float, help='Minimum reliability level to filter the pods', default=0)
 search_occupied_cpu_parser.add_argument('--duration', type=int, help='Minimum duration to filter the pods (in hours)', default=1)  
-search_occupied_cpu_parser.add_argument('--gpu-type', type=str, help='Type of GPU to filter the pods', default='All GPUs')  
+search_occupied_cpu_parser.add_argument('--cpu-type', type=str, help='Type of CPU to filter the pods', default='All CPUs')  
 search_occupied_cpu_parser.add_argument('--location', type=str, help='Location to filter the pods', default='All Regions') 
 search_occupied_cpu_parser.add_argument('--sortby', type=str, choices=['price', 'reliability', 'performance'], help='Sort by field', default='') 
 search_occupied_cpu_parser.set_defaults(func=search_notrentable_cpu)
 
 search_all_cpu_parser = client_subparsers.add_parser('search-all-cpu', help="List All CPU offers")
 search_all_cpu_parser.set_defaults(func=search_all_cpu)
-search_all_cpu_parser.add_argument('--num-gpus', type=int, help='Number of GPUs to filter the pods', default=0) 
+search_all_cpu_parser.add_argument('--num-cpus', type=int, help='Number of CPUs to filter the pods', default=0) 
 search_all_cpu_parser.add_argument('--max-hourly-cost', type=float, help='Maximum hourly cost to filter the pods', default=20)  
 search_all_cpu_parser.add_argument('--disk-space', type=int, help='Amount of disk space to filter the pods', default=0) 
 search_all_cpu_parser.add_argument('--reliability', type=float, help='Minimum reliability level to filter the pods', default=0)
 search_all_cpu_parser.add_argument('--duration', type=int, help='Minimum duration to filter the pods (in hours)', default=1)  
-search_all_cpu_parser.add_argument('--gpu-type', type=str, help='Type of GPU to filter the pods', default='All GPUs')  
+search_all_cpu_parser.add_argument('--cpu-type', type=str, help='Type of CPU to filter the pods', default='All CPUs')  
 search_all_cpu_parser.add_argument('--location', type=str, help='Location to filter the pods', default='All Regions') 
 search_all_cpu_parser.add_argument('--sortby', type=str, choices=['price', 'reliability', 'performance'], help='Sort by field', default='') 
 search_all_cpu_parser.set_defaults(func=search_all_cpu)
