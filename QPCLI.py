@@ -7,7 +7,7 @@ from datetime import datetime
 import csv
 import pandas as pd
 
-#print("QuickPod CLI Version 1.1.1.")
+#print("QuickPod CLI Bugfix 1.2.1.")
 #print("Copyright (C) 2025 QuickPod. All Rights Reserved")
 #Thank you for choosing QuickPod!
 fail_counter = 0 #Counter for repetitive API fails.
@@ -51,6 +51,7 @@ def auto_login(): #Auto login enforcement if an API call has failed.
                     exit()
         elif response.status_code == 401: # 401 = AUTH ERROR.
             print("401. Bad login method.") #Bad login method.
+
         else:
             print(response.status_code) # Otherwise it prints the response code.
                     
@@ -1429,7 +1430,7 @@ else:
 if silent:
     pass
 else:
-    print("QuickPod CLI Version 1.1.1.") # version
+    print("QuickPod CLI Bugfix 1.1.2.") # version
     print("Copyright (C) 2025 QuickPod. All Rights Reserved") # Copyright
 load_dotenv() # Load in the variables stored in the dotenv
 authToken = os.getenv("authToken") # Gets the authtoken from dotenv
