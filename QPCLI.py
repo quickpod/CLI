@@ -1,4 +1,5 @@
 import argparse
+import sys
 import os
 import requests
 from dotenv import load_dotenv
@@ -7,7 +8,11 @@ from datetime import datetime
 import csv
 import pandas as pd
 
+<<<<<<< Updated upstream
 #print("QuickPod CLI Version 1.1.1.")
+=======
+#print("QuickPod CLI Beta 1.2.0.")
+>>>>>>> Stashed changes
 #print("Copyright (C) 2025 QuickPod. All Rights Reserved")
 #Thank you for choosing QuickPod!
 fail_counter = 0 #Counter for repetitive API fails.
@@ -17,9 +22,9 @@ def unix_to_human_time(unix_time): #Only used in old commands; Any command can b
     else:
         return unix_time 
 def auto_login(): #Auto login enforcement if an API call has failed.
-    if not api_key: #Skips if api_key is not being used.
-            pass
-    else:
+    global fail_counter
+    api_key = os.getenv("api_key")
+    if api_key: #If API key exists:
         login_url = 'https://api.quickpod.io/api:2USncWkT/auth/apikeylogin'
         credentials = {
             'api_key': api_key, 
@@ -27,14 +32,13 @@ def auto_login(): #Auto login enforcement if an API call has failed.
         try:
             response = requests.post(login_url, json=credentials) #Sends POST to the API.
         except Exception as e: # If it fails:
-            if fail_counter == 3: #Gives it three attemps to succeed before quitting.
+            if fail_counter > 2: #Gives it three attemps to succeed before quitting.
                 print(f"API refused the call.{e}")
                 print(f"Program has failed three times in a row.")
                 print("ending.")
-                exit() #End program
+                login()
             else:
-                fail_counter = fail_counter + 1
-                exec(open(sys.argv[0]).read())
+                retry_login(response)
         if response.status_code == 200: #If success:
             authToken = response.json().get('authToken') # Use the new authToken instead of the old one.
             if authToken:
@@ -43,14 +47,17 @@ def auto_login(): #Auto login enforcement if an API call has failed.
                 with open('.env', 'a') as f:
                     f.write(f"api_key={api_key}\n") # Saves the correctly used api_key. The above command wipes the .env file so this must be rewritten.
                 load_dotenv() #Saves / Loads the new variables
-                if hasattr(args, 'func'):
-                    args.func()  # Runs the requested command again
-                    exit()
-                else:
-                    parser.print_help() # If no command specified then displays help as a backup.
-                    exit()
+                os.environ['authToken'] = authToken
+                os.environ['api_key'] = api_key
+                script_path = sys.argv[0]
+                arguments = sys.argv[1:]
+                os.execv(sys.executable, [sys.executable] + [script_path] + arguments)
+            else:
+                print("No authtoken")
+                login()
         elif response.status_code == 401: # 401 = AUTH ERROR.
             print("401. Bad login method.") #Bad login method.
+<<<<<<< Updated upstream
         else:
             print(response.status_code) # Otherwise it prints the response code.
                     
@@ -58,43 +65,77 @@ def auto_login(): #Auto login enforcement if an API call has failed.
         password = os.getenv("password")
         if not email: # Checks for email.
             print("Authtoken expired. No method of login stored.") # If it doesn't exist then it forces login.
+=======
+>>>>>>> Stashed changes
             login()
         else:
-            login_url = 'https://api.quickpod.io/api:2USncWkT/auth/login'
-            credentials = {
-                'email': email, 
-                'password': password,
+            print(response.status_code) # Otherwise it prints the response code.
+            retry_login(response)                 
+    else:
+        pass
+    print("no api key")
+    email = os.getenv("email")
+    password = os.getenv("password")
+    if email:
+        login_url = 'https://api.quickpod.io/api:2USncWkT/auth/login'
+        credentials = {
+            'email': email, 
+            'password': password,
             }
-            try:
-                response = requests.post(login_url, json=credentials) # Sends POST request
-            except Exception as e:
-                if fail_counter == 3: # If it fails 3 times:
-                    print(f"API refused the call.{e}") 
-                    print(f"Program has failed three times in a row.")
-                    print("ending.")
-                    exit() # Quit program
-                else:
-                    fail_counter = fail_counter + 1
-                    exec(open(sys.argv[0]).read())
-            if response.status_code == 200: # If success:
-                authToken = response.json().get('authToken') # Gets authToken from the response.
-                if authToken:
-                    with open('.env', 'w') as f:
-                        f.write(f"authToken={authToken}\n")  # Writes the new authtoken
-                    with open('.env', 'a') as f:
-                        f.write(f"email={email}\n") # Write successful email
-                    with open('.env', 'a') as f:
-                        f.write(f"password={password}\n") # Write successful password
-                    load_dotenv()
-                    if hasattr(args, 'func'):
-                        args.func() # Reruns the requested command.
-                        exit()
-                    else:
-                        parser.print_help() # Otherwise prints help as a backup.
-                        exit()
+        try:
+            response = requests.post(login_url, json=credentials) # Sends POST request
+        except Exception as e:
+            fail_reason = response
+            if fail_counter > 2: # If it fails 3 times:
+                print(f"API refused the call.{e}") 
+                print(f"Program has failed three times in a row.")
+                print("ending.")
+                login() # Send back to login
             else:
-                print(f"Login failed {response.status_code}") # Prints the code if it fails.
-                login() # Throws back to login.
+                fail_counter = fail_counter + 1
+                exec(open(sys.argv[0]).read())
+        if response.status_code == 200: # If success:
+            authToken = response.json().get('authToken') # Gets authToken from the response.
+            if authToken:
+                with open('.env', 'w') as f:
+                    f.write(f"authToken={authToken}\n")  # Writes the new authtoken
+                with open('.env', 'a') as f:
+                    f.write(f"email={email}\n") # Write successful email
+                with open('.env', 'a') as f:
+                    f.write(f"password={password}\n") # Write successful password
+                load_dotenv()
+                os.environ['authToken'] = authToken
+                os.environ['email'] = email
+                os.environ['password'] = password
+                script_path = sys.argv[0]
+                arguments = sys.argv[1:]
+                os.execv(sys.executable, [sys.executable] + [script_path] + arguments)
+            else:
+                parser.print_help() # Otherwise prints help as a backup.
+                exit()
+        elif response.status_code == 401: # 401 = AUTH ERROR.
+            print("401. Bad login method.") #Bad login method.
+            login()
+        else:
+            #print(response.status_code) # Otherwise it prints the response code.
+            retry_login()
+    else:
+        print("Authtoken expired. No method of login stored.") # If it doesn't exist then it forces login.
+        login()
+            
+
+def retry_login(fail_reason):
+    global fail_counter
+    print("failed")
+    print(fail_counter)
+    fail_counter = fail_counter + 1
+    if fail_counter > 2: # If it fails 3 times:
+        print(f"Program has failed to login three times in a row.")
+        print(fail_reason)
+        print("login.")
+        login()
+    else:
+        auto_login()
 
 def login(): #Normal login or backup requires user input.
     login_method = input("Enter your QuickPod Email Or API Key Or Auth Token:") # Asks for login info
@@ -114,7 +155,11 @@ def login(): #Normal login or backup requires user input.
                 f.write(f"api_key={api_key}\n") # Saves api_key in the .env
             load_dotenv() # Saves/loads .env
             print("Auth Token Stored successfully!") # Success!
-            exit() # Will be removed later.
+            os.environ['authToken'] = authToken
+            os.environ['api_key'] = api_key
+            script_path = sys.argv[0]
+            arguments = sys.argv[1:]
+            os.execv(sys.executable, [sys.executable] + [script_path] + arguments)
     elif len(login_method) > 300: # Will be removed in the next update. Saves a likely invalid key.
         print("WARNING: authTokens are refreshed every 24 hours. You will likely have issues with this!!!")
         newauthtoken = login_method
@@ -123,7 +168,10 @@ def login(): #Normal login or backup requires user input.
         with open('.env', 'w') as f:
             f.write(f"authToken={newauthtoken}") # Saves authToken in the .env
         load_dotenv() # Saves / Loads .env
-        exit() # Will be removed later.
+        os.environ['authToken'] = authToken
+        script_path = sys.argv[0]
+        arguments = sys.argv[1:]
+        os.execv(sys.executable, [sys.executable] + [script_path] + arguments)
     else:
         print("Using Email / Password Authentication") # Email/passwd auth as a last resort.
         email = login_method
@@ -145,12 +193,18 @@ def login(): #Normal login or backup requires user input.
                     f.write(f"password={password}\n") # Writes successful password to .env for future commands.
                 load_dotenv()
                 print("Auth Token Stored successfully!")
+                os.environ['authToken'] = authToken
+                os.environ['email'] = email
+                os.environ['password'] = password
+                script_path = sys.argv[0]
+                arguments = sys.argv[1:]
+                os.execv(sys.executable, [sys.executable] + [script_path] + arguments)
             else:
                 print("Error: AuthToken not found in the response.")
         else:
             print(f"Login failed. Status code: {response.status_code}") #If failed print response code.
             print(response.text)
-            exit() # WILL REPLACE LATER with another login attempt.
+            exit()
 def search_all():
     if silent:
         pass
@@ -234,6 +288,8 @@ def search_all():
                         writer.writerow(row) # With some information fotten from the _machines section and some from the outside response creates a row in the CSV.
             except Exception as e:
                 print(f"Error parsing JSON response: {e}") # Prints the error.
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to fetch pods. Status code: {response.status_code}") # Prints the error status code.
         if silent:
@@ -385,6 +441,8 @@ def search(): # Offers Search function
 
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # State the error.
+    elif response.status_code == 401:
+        auto_login()
     else:
         print(f"Failed to fetch pods. Status code: {response.status_code}") # Print the response failure code.
 def search_cpu():
@@ -460,6 +518,8 @@ def search_cpu():
                     print(f"Current Rentals Running: {current_rentals_on_demand}")
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # Prints the error.
+    elif response.status_code == 401:
+            auto_login()
     else:
         print(f"Failed to fetch pods. Status code: {response.status_code}") # Prints the error status code.
 def search_notrentable():
@@ -607,6 +667,8 @@ def search_notrentable():
 
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # State the error.
+    elif response.status_code == 401:
+            auto_login()
     else:
         print(f"Failed to fetch pods. Status code: {response.status_code}") # Print the response failure code.
 def search_notrentable_cpu():
@@ -682,6 +744,8 @@ def search_notrentable_cpu():
                     print(f"Current Rentals Running: {current_rentals_on_demand}")
         except Exception as e: # If it fails:
             print(f"Error parsing JSON response: {e}") # Prints the error.
+    elif response.status_code == 401:
+            auto_login()
     else:
         print(f"Failed to fetch pods. Status code: {response.status_code}") # Prints the error status code.
 def search_all_cpu():
@@ -700,7 +764,7 @@ def list_ssh(): # A function for listing SSH logins of all pods.
         response = requests.get(pods_url, headers=headers)   # send a GET response to mypods.
         if response.status_code == 200: # If success:
             data_gpu = response.json()
-            print("ID                            SSH Command                                              Status") # Sketchy way to print a header row :)
+            print("  ID                            SSH Command                                              Status") # Sketchy way to print a header row :)
             for pod in data_gpu: # For every pod run:
                 podid = pod.get('id', 0)
                 ip = pod.get('public_ipaddr', 0)
@@ -708,6 +772,8 @@ def list_ssh(): # A function for listing SSH logins of all pods.
                 usrname = pod.get('Names', 'N/A')
                 status = pod.get('Status', 0)
                 print(f'{podid}     ssh -p {sshport} {usrname}@{ip}     {status}') #Assemble the SSH command and print it.
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"failed{response.status_code}") # Print the response failure code.
             exit()
@@ -726,7 +792,8 @@ def list_ssh(): # A function for listing SSH logins of all pods.
                 usrname = pod.get('Names', 'N/A')
                 status = pod.get('Status', 0)
                 print(f'{podid}     ssh -p {sshport} {usrname}@{ip}     {status}') # Assemble the CPU pods ssh and print it
-
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"failed{response.status_code}") # Print failure code 
             exit()
@@ -787,6 +854,8 @@ def list_pods(): # A function for listing all pods a client is currently running
                     print("The response is not a list of pods. Please check the API response.")
             except Exception as e:
                 print(f"Error parsing JSON response: {e}") # Prints the error
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to fetch pods. Status code: {response.status_code}") # prints the error code
     else:
@@ -846,6 +915,8 @@ def list_pods_cpu():
                     print("The response is not a list of pods. Please check the API response.")
             except Exception as e: # If error:
                 print(f"Error parsing JSON response: {e}") # Print the error response.
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to fetch pods. Status code: {response.status_code}") # Print the error status code.
     else:
@@ -899,6 +970,8 @@ def my_templates():
                 pd.set_option('display.max_rows', None)
                 list = pd.DataFrame(message) # Makes List
                 print(list[['id', 'created_at', 'user_id', 'image_path', 'template_uuid', 'launch_mode', 'disk_space', 'is_public', 'template_type',]].to_string(index=False)) # Prints list with specific columns only.
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to get templates. Status code: {response.status_code}") # Prints failure code.
             print(message)
@@ -929,6 +1002,8 @@ def create_job():
         message = response.json()  # parse the response.
         if response.status_code == 200: # If success.
             print(message)
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to create pod. Status code: {response.status_code}") # Prints failure status code.
             print(message)
@@ -957,6 +1032,8 @@ def create_pod():
         message = response.json()  # parse the response.
         if response.status_code == 200: # If success.
             print(message)
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to create pod. Status code: {response.status_code}") # Prints failure status code.
             print(message)
@@ -980,6 +1057,8 @@ def start_pod():
             else:
                 print("success!")
                 print(message)
+        elif response.status_code == 401:
+            auto_login()
         else: # If it fails:
             if args.raw:
                 print(response.status_code) # Print raw API response.
@@ -1003,6 +1082,8 @@ def stop_pod():
         if response.status_code == 200: # If Success
             print("success!")
             print(message)
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to stop pod. Status code: {response.status_code}") # Print error code.
             print(message)
@@ -1026,6 +1107,8 @@ def restart_pod():
             else:
                 print("success!")
                 print(message)
+        elif response.status_code == 401:
+            auto_login()
         else: # If it fails:
             if args.raw:
                 print(response.status_code) # Prints raw API output
@@ -1072,6 +1155,8 @@ def restart_all_pods():
                     else:
                         print(f"Failed to restart pod. Status code: {response.status_code}") # Print failure status code.
                         print(message)
+        elif response.status_code == 401:
+            auto_login()
 
 def destroy_pod(): # Destroys a Pod
     if authToken:
@@ -1093,6 +1178,8 @@ def destroy_pod(): # Destroys a Pod
             else:
                 print("success!")
                 print(message)
+        elif response.status_code == 401:
+            auto_login()
         else:
             if args.raw:
                 print(response.status_code) # Prints status code
@@ -1167,6 +1254,8 @@ def list_machines(): # lists all machines HOSTS ONLY
                             print(machineslist[['id', 'hostname', 'cpu_name', 'cpu_cores', 'cpu_ram', 'geolocation', 'public_ipaddr', 'online', 'perf_score', 'reliability', 'listed', 'max_duration', 'machine_type',]].to_string(index=False)) # Prints list with only certain columns
             except Exception as e:
                 print(f"Error parsing JSON response: {e}") # Displays error
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to fetch machines. Status code: {response.status_code}") # Prints error status code.
     else:
@@ -1221,6 +1310,8 @@ def list_cpu_machines():# List CPU machines HOSTS ONLY
                     print("Error: Expected a list of machines, but received a different structure.")
             except Exception as e:
                 print(f"Error parsing JSON response: {e}") # Prints the error
+        elif response.status_code == 401:
+            auto_login()
         else:
             print(f"Failed to fetch pods. Status code: {response.status_code}") # Prints the error code
     else:
@@ -1228,6 +1319,30 @@ def list_cpu_machines():# List CPU machines HOSTS ONLY
 def list_all_machines(): # Runs both functions.
     list_machines()
     list_cpu_machines()
+def get_machine_contracts():
+    pods_url = 'https://api.quickpod.io/api:KoOk0R5J/mymachine_contracts'
+    headers = {
+        'Authorization': f'Bearer {authToken}',
+        'Content-Type': 'application/json'
+    } 
+    #try:
+    response = requests.get(pods_url, headers=headers)
+    message = response.json()
+    #except Exception as e:
+        #print(f"Error from the API {e}") # Prints the error
+    
+    if response.status_code == 200:
+        if args.raw:
+            print(message)
+        elif args.json:
+            json_parser(message)
+        else:
+            print("Still in dev")
+    elif response.status_code == 401:
+        auto_login()
+    else:
+        print(f"error{response.status_code}")
+            
 def print_auth_token(): # Prints the currently stored authtoken
     if args.raw or args.json or args.silent: # if any of the silencing variables are existant run:
         print(authToken)
@@ -1429,7 +1544,11 @@ else:
 if silent:
     pass
 else:
+<<<<<<< Updated upstream
     print("QuickPod CLI Version 1.1.1.") # version
+=======
+    print("QuickPod CLI Beta 1.2.0.") # version
+>>>>>>> Stashed changes
     print("Copyright (C) 2025 QuickPod. All Rights Reserved") # Copyright
 load_dotenv() # Load in the variables stored in the dotenv
 authToken = os.getenv("authToken") # Gets the authtoken from dotenv
@@ -1441,18 +1560,7 @@ if args.authtoken: # If using a custom authtoken:
     else:
         print(f"Using Custom Auth Token: {authToken[:4]}")
 elif authToken:
-    pods_url = 'https://api.quickpod.io/api:2USncWkT/auth/me'
-    headers = {
-        'Authorization': f'Bearer {authToken}',
-        'Content-Type': 'application/json'
-    }  
-    response = requests.get(pods_url, headers=headers) # Sends a GET request to /auth/me to see if the authtoken is correct.
-    if response.status_code == 200: # If sucess:
-        pass
-    elif response.status_code == 401: # if failure.
-        api_key = os.getenv("api_key")
-    else:
-        print("ERROR: QuickPod /auth/me has had an issue. Continuing.") 
+    pass
 elif args.bypass_login: # If bypass login is selected
     pass
 else:
@@ -1472,3 +1580,4 @@ if hasattr(args, 'func'): # If a function is specified:
     args.func() # Run that function
 else:
     parser.print_help() # Otherwise print the help.
+get_machine_contracts()
