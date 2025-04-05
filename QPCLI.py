@@ -9,7 +9,11 @@ import csv
 import pandas as pd
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #print("QuickPod CLI Version 1.1.1.")
+=======
+#print("QuickPod CLI Beta 1.2.0.")
+>>>>>>> Stashed changes
 =======
 #print("QuickPod CLI Beta 1.2.0.")
 >>>>>>> Stashed changes
@@ -58,6 +62,7 @@ def auto_login(): #Auto login enforcement if an API call has failed.
         elif response.status_code == 401: # 401 = AUTH ERROR.
             print("401. Bad login method.") #Bad login method.
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         else:
             print(response.status_code) # Otherwise it prints the response code.
                     
@@ -65,6 +70,8 @@ def auto_login(): #Auto login enforcement if an API call has failed.
         password = os.getenv("password")
         if not email: # Checks for email.
             print("Authtoken expired. No method of login stored.") # If it doesn't exist then it forces login.
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             login()
@@ -1545,7 +1552,11 @@ if silent:
     pass
 else:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     print("QuickPod CLI Version 1.1.1.") # version
+=======
+    print("QuickPod CLI Beta 1.2.0.") # version
+>>>>>>> Stashed changes
 =======
     print("QuickPod CLI Beta 1.2.0.") # version
 >>>>>>> Stashed changes
