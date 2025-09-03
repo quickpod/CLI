@@ -6,7 +6,6 @@ import json
 from datetime import datetime 
 import csv
 import pandas as pd
-
 #print("QuickPod CLI Bugfix 1.1.2.")
 #print("Copyright (C) 2025 QuickPod. All Rights Reserved")
 #Thank you for choosing QuickPod!
