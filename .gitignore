@@ -175,3 +175,4 @@ cython_debug/
 
 # Aider
 .aider*
+QPCLI_FINAL.py
